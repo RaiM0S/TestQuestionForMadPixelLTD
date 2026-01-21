@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FigureController : MonoBehaviour, IDragable
+public class Figure : MonoBehaviour, IDragable
 {
     private bool _dragging = false;
     private Vector3 _startPosition;
