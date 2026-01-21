@@ -8,6 +8,9 @@ public class Figure : MonoBehaviour
 
     [SerializeField] private Animator animator;
 
+    /// <summary>
+    /// Задаю сначала 0 потом тир ап, что бы не дублировать свой же код
+    /// </summary>
     public void Spawn()
     {
         Tier = 0;
@@ -19,11 +22,16 @@ public class Figure : MonoBehaviour
         Tier += 1;
         GetComponent<Image>().color = GameAssets.Instance.GetColorByTier(Tier);
     }
-
+    /// <summary>
+    /// Задает в аниматоре переменную для проигрывания анимации
+    /// </summary>
     public void StartDragAnim()
     {
         animator.SetBool("Drag", true);
     }
+    /// <summary>
+    /// Задает в аниматоре переменную для остановки анимации
+    /// </summary>
     public void StopDragAnim()
     {
         animator.SetBool("Drag", false);

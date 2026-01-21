@@ -8,7 +8,12 @@ public class Slot : MonoBehaviour
     private Vector3 _startPosition;
     public Figure Figure { get { return _currentFigure; }}
     public bool IsEmpty { get { return _currentFigure == null; } }
-    
+
+
+    /// <summary>
+    /// Спавнит фигуры внутри слота
+    /// </summary>
+    /// <param name="figure">Префаб для фигуры</param>
     public void Spawn(GameObject figure)
     {
         GameObject newFigure = Instantiate(figure);
@@ -16,7 +21,10 @@ public class Slot : MonoBehaviour
         _currentFigure = newFigure.GetComponent<Figure>();
         _currentFigure.Spawn();
     }
-
+    /// <summary>
+    /// Пытается замерджить фигуры в двух слотах
+    /// </summary>
+    /// <param name="slot">Слот из которого мерджим</param>
     public void TryMerge(Slot slot)
     {
         if (this == slot)
@@ -36,6 +44,10 @@ public class Slot : MonoBehaviour
             slot.DeleteFigure(true);
         }
     }
+    /// <summary>
+    /// Удаляет фигуру из слота
+    /// </summary>
+    /// <param name="deleteObj">Удалять ли сам обьект фигуры со сцены</param>
     public void DeleteFigure(bool deleteObj)
     {
         if(deleteObj)
@@ -45,6 +57,10 @@ public class Slot : MonoBehaviour
         StopDrag();
         _currentFigure = null;
     }
+
+    /// <summary>
+    /// Начало перетаскивания
+    /// </summary>
     public void StartDrag()
     {
         _dragging = true;
@@ -53,7 +69,9 @@ public class Slot : MonoBehaviour
         _currentFigure.transform.SetAsLastSibling();
         _currentFigure.StartDragAnim();
     }
-
+    /// <summary>
+    /// Конец перетаскивания
+    /// </summary>
     public void StopDrag()
     {
         _dragging = false;
@@ -66,11 +84,18 @@ public class Slot : MonoBehaviour
     }
     private void Update()
     {
+        Drag();
+    }
+    /// <summary>
+    /// Тащит обьект за курсором
+    /// </summary>
+    private void Drag()
+    {
         if (_dragging)
         {
             Vector3 newPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             newPos.z = _startPosition.z;
-            if(_currentFigure!= null)
+            if (_currentFigure != null)
             {
                 _currentFigure.transform.position = newPos;
             }

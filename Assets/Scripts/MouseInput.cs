@@ -2,10 +2,18 @@ using UnityEngine;
 
 public class MouseInput: MonoBehaviour
 {
-    // здесь можно бы вывести интерфейс для обьектов на которые будем наводиться в будущем, но пока для реализации задания не нужно
+    // здесь можно бы вывести интерфейс и работать с ним для обьектов на которые будем наводиться в будущем, но пока для реализации задания не нужно
     private Slot onMouseObj = null;
 
+    
     private void Update()
+    {
+        GetInputs();
+    }
+    /// <summary>
+    /// Обработчик нажатий мыши
+    /// </summary>
+    private void GetInputs()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -17,9 +25,9 @@ public class MouseInput: MonoBehaviour
                 }
             }
         }
-        if(Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0))
         {
-            if(onMouseObj != null)
+            if (onMouseObj != null)
             {
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
                 {
