@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Slot : MonoBehaviour, IDragable
+public class Slot : MonoBehaviour
 {
     private Figure _currentFigure = null;
     private bool _dragging = false;
@@ -13,10 +13,15 @@ public class Slot : MonoBehaviour, IDragable
         GameObject newFigure = Instantiate(figure);
         newFigure.transform.SetParent(transform, false);
         _currentFigure = newFigure.GetComponent<Figure>();
+        _currentFigure.Spawn();
     }
 
     public void TryMerge(Slot slot)
     {
+        if (this == slot)
+        {
+            return;
+        }
         if(IsEmpty)
         {
             _currentFigure = slot.Figure;
@@ -26,8 +31,8 @@ public class Slot : MonoBehaviour, IDragable
         }
         else if(slot.Figure.Tier == _currentFigure.Tier)
         {
+            _currentFigure.TierUp();
             slot.DeleteFigure(true);
-            _currentFigure.Tier += 1;
         }
     }
     public void DeleteFigure(bool deleteObj)
@@ -42,6 +47,8 @@ public class Slot : MonoBehaviour, IDragable
     {
         _dragging = true;
         _startPosition = _currentFigure.transform.position;
+        _currentFigure.transform.SetParent(transform.parent);
+        _currentFigure.transform.SetAsLastSibling();
     }
 
     public void StopDrag()
@@ -50,6 +57,7 @@ public class Slot : MonoBehaviour, IDragable
         if(_currentFigure != null)
         {
            _currentFigure.transform.position = _startPosition;
+            _currentFigure.transform.SetParent(transform);
         }
     }
 
@@ -59,7 +67,10 @@ public class Slot : MonoBehaviour, IDragable
         {
             Vector3 newPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             newPos.z = _startPosition.z;
-            _currentFigure.transform.position = newPos;
+            if(_currentFigure!= null)
+            {
+                _currentFigure.transform.position = newPos;
+            }
         }
     }
 }
