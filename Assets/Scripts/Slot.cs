@@ -5,7 +5,7 @@ public class Slot : MonoBehaviour, IDragable
     private Figure _currentFigure = null;
     private bool _dragging = false;
     private Vector3 _startPosition;
-    public Figure Figure { get { return _currentFigure; } private set { } }
+    public Figure Figure { get { return _currentFigure; }}
     public bool IsEmpty { get { return _currentFigure == null; } }
     
     public void Spawn(GameObject figure)
@@ -20,13 +20,22 @@ public class Slot : MonoBehaviour, IDragable
         if(IsEmpty)
         {
             _currentFigure = slot.Figure;
-            slot.DeleteFigure();
+            slot.DeleteFigure(false);
             _currentFigure.transform.SetParent(transform, false);
             _currentFigure.transform.localPosition = Vector3.zero;
         }
+        else if(slot.Figure.Tier == _currentFigure.Tier)
+        {
+            slot.DeleteFigure(true);
+            _currentFigure.Tier += 1;
+        }
     }
-    public void DeleteFigure()
+    public void DeleteFigure(bool deleteObj)
     {
+        if(deleteObj)
+        {
+            Destroy(_currentFigure.gameObject);
+        }
         _currentFigure = null;
     }
     public void StartDrag()
