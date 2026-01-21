@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class MouseInput: MonoBehaviour
 {
-    private Slot dragObj = null;
+    // здесь можно бы вывести интерфейс для обьектов на которые будем наводиться в будущем, но пока для реализации задания не нужно
+    private Slot onMouseObj = null;
 
     private void Update()
     {
@@ -10,25 +11,25 @@ public class MouseInput: MonoBehaviour
         {
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
             {
-                if(hit.collider.TryGetComponent(out dragObj))
+                if (hit.collider.TryGetComponent(out onMouseObj))
                 {
-                    dragObj.StartDrag();
+                    onMouseObj.StartDrag();
                 }
             }
         }
-        else if(Input.GetMouseButtonUp(0))
+        if(Input.GetMouseButtonUp(0))
         {
-            if(dragObj != null)
+            if(onMouseObj != null)
             {
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
                 {
                     if (hit.collider.TryGetComponent(out Slot newSlot))
                     {
-                        newSlot.TryMerge(dragObj);
+                        newSlot.TryMerge(onMouseObj);
                     }
                 }
-                dragObj.StopDrag();
-                dragObj = null;
+                onMouseObj.StopDrag();
+                onMouseObj = null;
             }
         }
     }

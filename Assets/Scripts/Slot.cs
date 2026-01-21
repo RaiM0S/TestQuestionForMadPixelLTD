@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Slot : MonoBehaviour
@@ -41,6 +42,7 @@ public class Slot : MonoBehaviour
         {
             Destroy(_currentFigure.gameObject);
         }
+        StopDrag();
         _currentFigure = null;
     }
     public void StartDrag()
@@ -49,6 +51,7 @@ public class Slot : MonoBehaviour
         _startPosition = _currentFigure.transform.position;
         _currentFigure.transform.SetParent(transform.parent);
         _currentFigure.transform.SetAsLastSibling();
+        _currentFigure.StartDragAnim();
     }
 
     public void StopDrag()
@@ -57,10 +60,10 @@ public class Slot : MonoBehaviour
         if(_currentFigure != null)
         {
            _currentFigure.transform.position = _startPosition;
-            _currentFigure.transform.SetParent(transform);
+           _currentFigure.transform.SetParent(transform);
+           _currentFigure.StopDragAnim();
         }
     }
-
     private void Update()
     {
         if (_dragging)
