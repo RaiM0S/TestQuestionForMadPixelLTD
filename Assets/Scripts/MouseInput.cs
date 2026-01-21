@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MouseInput: MonoBehaviour
 {
-    private IDragable dragObj = null;
+    private Slot dragObj = null;
 
     private void Update()
     {
@@ -20,6 +20,13 @@ public class MouseInput: MonoBehaviour
         {
             if(dragObj != null)
             {
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+                {
+                    if (hit.collider.TryGetComponent(out Slot newSlot))
+                    {
+                        newSlot.TryMerge(dragObj);
+                    }
+                }
                 dragObj.StopDrag();
                 dragObj = null;
             }
