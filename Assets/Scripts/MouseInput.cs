@@ -2,26 +2,27 @@ using UnityEngine;
 
 public class MouseInput: MonoBehaviour
 {
-    private Camera _camera;
+    private IDragable dragObj = null;
 
-    private void Awake()
-    {
-        _camera = Camera.main;
-    }
     private void Update()
     {
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
-        {
-            Debug.Log(hit.collider.gameObject);
-        }
-
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Pressed");
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+            {
+                if(hit.collider.TryGetComponent(out dragObj))
+                {
+                    dragObj.StartDrag();
+                }
+            }
         }
         else if(Input.GetMouseButtonUp(0))
         {
-            Debug.Log("Unpressed");
+            if(dragObj != null)
+            {
+                dragObj.StopDrag();
+                dragObj = null;
+            }
         }
     }
 }
